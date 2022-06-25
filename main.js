@@ -5,6 +5,13 @@ const hole = 'O';
 const fieldCharacter = '░';
 const pathCharacter = '*';
 
+let randomField;
+let userHeight = prompt("input heigth, max 35");
+if (userHeight > 35) userHeight = 35;
+let userWidth = prompt("input width, max 135");
+if (userWidth > 125) userWidth = 135;
+//let userPercentage = prompt("input % of holes");
+
 class Field {
     constructor(arr) {
         this.arr = arr;
@@ -32,15 +39,11 @@ class Field {
 
         let playing = true;
 
-        while (playing) {     
+        while (true) {     
             this.print();
-            console.log(player);
             move = prompt("Which way western man? W = up, S = down, A = left, D = rigth");
-            if (move === "r") {
-                randomField = new Field (Field.generateField(randomField.heigth, randomField.width, randomField.percentage))
-                randomField.print();
-            }
-            else if (move === "a") {
+            
+            if (move === "a") {
                player[1] -= 1;
             }
             else if (move === "d") {
@@ -66,7 +69,8 @@ class Field {
         } 
     };
 
-    static generateField(heigth, width, percentage) {       
+    static generateField(heigth, width) {
+        
         let randomArr = [];
         let intArr;
         let topography;
@@ -74,7 +78,7 @@ class Field {
             intArr = [];  
             for (let j = 0; j < width; j++) {                             
                 topography = Math.floor(Math.random() * 100);
-                if (topography <= percentage) {
+                if (topography <= 36) {
                     topography = hole;
                 }
                 else {
@@ -86,7 +90,75 @@ class Field {
         }
         randomArr[0][0] = pathCharacter;
         randomArr[(heigth - 1) - Math.floor(Math.random() * (heigth / 4))][(width - 1) - Math.floor(Math.random() * (width / 4))] = hat; 
-        return randomArr;
+        
+        let visited = [[0, 0]];
+        let visitedTwice = [];
+        let visited3x = [];
+        let visited4x = [];
+        let p = [0, 0];
+        while (true) {           
+            //checking if next move is a winning move
+            if (randomArr?.[p[0]]?.[p[1] + 1] === hat || randomArr?.[p[0]]?.[p[1] - 1] === hat || randomArr?.[p[0] + 1]?.[p[1]] === hat || randomArr?.[p[0] - 1]?.[p[1]] === hat) {
+                let goodField = new Field (randomArr);
+                goodField.play();
+                return;
+            }          
+            //checking if neighbouring square hasn't been visited, if no, go there
+            else if (randomArr?.[p[0]]?.[p[1] + 1] === fieldCharacter && !visited.some(([el1, el2]) => el1 == p[0] && el2 == p[1] + 1)) {
+                p[1] += 1;
+                visited.push([p[0], p[1]]);
+            } else if (randomArr?.[p[0]]?.[p[1] - 1] === fieldCharacter && !visited.some(([el1, el2]) => el1 == p[0] && el2 == p[1] - 1)) {
+                p[1] -= 1;
+                visited.push([p[0], p[1]]);
+            } else if (randomArr?.[p[0] + 1]?.[p[1]] === fieldCharacter && !visited.some(([el1, el2]) => el1 == p[0] + 1 && el2 == p[1])) {
+                p[0] += 1;
+                visited.push([p[0], p[1]]);
+            } else if (randomArr?.[p[0] - 1]?.[p[1]] === fieldCharacter && !visited.some(([el1, el2]) => el1 == p[0] - 1 && el2 == p[1])) {
+                p[0] -= 1;
+                visited.push([p[0], p[1]]);
+            //checking if neighbouring square hasn't been visited twice, if no, go there
+            } else if (randomArr?.[p[0]]?.[p[1] + 1] === fieldCharacter && !visitedTwice.some(([el1, el2]) => el1 == p[0] && el2 == p[1] + 1)) {
+                p[1] += 1;
+                visitedTwice.push([p[0], p[1]]);
+            } else if (randomArr?.[p[0]]?.[p[1] - 1] === fieldCharacter && !visitedTwice.some(([el1, el2]) => el1 == p[0] && el2 == p[1] - 1)) {
+                p[1] -= 1;
+                visitedTwice.push([p[0], p[1]]);
+            } else if (randomArr?.[p[0] + 1]?.[p[1]] === fieldCharacter && !visitedTwice.some(([el1, el2]) => el1 == p[0] + 1 && el2 == p[1])) {
+                p[0] += 1;
+                visitedTwice.push([p[0], p[1]]);
+            } else if (randomArr?.[p[0] - 1]?.[p[1]] === fieldCharacter && !visitedTwice.some(([el1, el2]) => el1 == p[0] - 1 && el2 == p[1])) {
+                p[0] -= 1;
+                visitedTwice.push([p[0], p[1]]);
+            //checking if neighbouring square hasn't been visited 3x, if no, go there    
+            } else if (randomArr?.[p[0]]?.[p[1] + 1] === fieldCharacter && !visited3x.some(([el1, el2]) => el1 == p[0] && el2 == p[1] + 1)) {
+                p[1] += 1;
+                visited3x.push([p[0], p[1]]);
+            } else if (randomArr?.[p[0]]?.[p[1] - 1] === fieldCharacter && !visited3x.some(([el1, el2]) => el1 == p[0] && el2 == p[1] - 1)) {
+                p[1] -= 1;
+                visited3x.push([p[0], p[1]]);
+            } else if (randomArr?.[p[0] + 1]?.[p[1]] === fieldCharacter && !visited3x.some(([el1, el2]) => el1 == p[0] + 1 && el2 == p[1])) {
+                p[0] += 1;
+                visited3x.push([p[0], p[1]]);
+            } else if (randomArr?.[p[0] - 1]?.[p[1]] === fieldCharacter && !visited3x.some(([el1, el2]) => el1 == p[0] - 1 && el2 == p[1])) {
+                p[0] -= 1;
+                visited3x.push([p[0], p[1]]);
+            //checking if neighbouring square hasn't been visited 4x, if no, go there
+            } else if (randomArr?.[p[0]]?.[p[1] + 1] === fieldCharacter && !visited4x.some(([el1, el2]) => el1 == p[0] && el2 == p[1] + 1)) {
+                p[1] += 1;
+                visited4x.push([p[0], p[1]]);
+            } else if (randomArr?.[p[0]]?.[p[1] - 1] === fieldCharacter && !visited4x.some(([el1, el2]) => el1 == p[0] && el2 == p[1] - 1)) {
+                p[1] -= 1;
+                visited4x.push([p[0], p[1]]);
+            } else if (randomArr?.[p[0] + 1]?.[p[1]] === fieldCharacter && !visited4x.some(([el1, el2]) => el1 == p[0] + 1 && el2 == p[1])) {
+                p[0] += 1;
+                visited4x.push([p[0], p[1]]);
+            } else if (randomArr?.[p[0] - 1]?.[p[1]] === fieldCharacter && !visited4x.some(([el1, el2]) => el1 == p[0] - 1 && el2 == p[1])) {
+                p[0] -= 1;
+                visited4x.push([p[0], p[1]]);
+            } else {                
+                randomField = new Field (Field.generateField(userHeight, userWidth));
+            }
+        }
     }
      
 }
@@ -95,10 +167,5 @@ const myField = new Field([
     ['░', 'O', '░'],
     ['░', '^', '░'],
 ]);
-
-//myField.play();
-
-var randomField = new Field (Field.generateField(prompt("input heigth"), prompt("input width"), prompt("input % of holes")));
-
-randomField.play();
+randomField = new Field (Field.generateField(userHeight, userWidth));
 
