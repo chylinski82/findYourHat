@@ -41,7 +41,7 @@ class Field {
 
         while (true) {     
             this.print();
-            move = prompt("Which way western man? W = up, S = down, A = left, D = rigth");
+            move = prompt("Which way western man? W = up, S = down, A = left, D = rigth, then press ENTER");
             
             if (move === "a") {
                player[1] -= 1;
