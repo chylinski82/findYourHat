@@ -1,6 +1,10 @@
 # Find Your Hat
 
-"Find Your Hat" is a simple game made with node.js, which is a version of "Maze Runner". The game generates a random maze of a custom size, and the player must navigate through it to find the hat.
+In this game, you play as on a field filled with holes and a single hat. Your goal is to navigate the field and reach the hat before falling into a hole or reaching the edge of the field.
+
+To move around the field, use the W, A, S, and D keys to move up, left, down, and right, respectively. Be careful not to fall into a hole or go off the field, or you will lose the game. If you manage to reach the hat, you win!
+
+The field is randomly generated each time you play, so no two games will be exactly the same. Can you reach the hat and emerge victorious?
 
 ## Overview
 
